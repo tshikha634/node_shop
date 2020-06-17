@@ -68,6 +68,14 @@ app.use(
 
 app.use(csrfProtection);
 app.use(flash());
+// app.use((req, res, next) => {
+//   User.findById('5bab316ce0a7c75f783cb8a8')
+//     .then(user => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.log(err));
+// });
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
@@ -100,7 +108,7 @@ app.use((error,req,res,next) => {
   res.status(500).render("500", {
     pageTitle: "Error!",
     path: "/500",
-    isAuthenticated: req.session.isLoggedIn,
+    isAuthenticated: req.session && req.session.isLoggedIn,
   });
 })
 

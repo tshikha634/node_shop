@@ -64,7 +64,7 @@ exports.postLogin = (req, res, next) => {
         email: email,
         password: password,
       },
-      validationErrors: errors.array(),
+      validationErrors: errors.array()
     });
   }
   User.findOne({ email: email })
@@ -145,7 +145,7 @@ if(!errors.isEmpty()){
           return user.save();
         })
         .then(result => {
-          console.log(result, "/login");  
+          console.log(result, "/login");
           res.redirect("/login");
           return transporter.sendMail({
             to: email,

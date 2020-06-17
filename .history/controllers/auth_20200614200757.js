@@ -13,6 +13,8 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 }));
 
 exports.getLogin = (req, res, next) => {
+  console.log(res.session.isLoggedIn, "getLogin");
+
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
@@ -64,7 +66,7 @@ exports.postLogin = (req, res, next) => {
         email: email,
         password: password,
       },
-      validationErrors: errors.array(),
+      validationErrors: errors.array()
     });
   }
   User.findOne({ email: email })
@@ -145,7 +147,7 @@ if(!errors.isEmpty()){
           return user.save();
         })
         .then(result => {
-          console.log(result, "/login");  
+          console.log(result, "/login");
           res.redirect("/login");
           return transporter.sendMail({
             to: email,

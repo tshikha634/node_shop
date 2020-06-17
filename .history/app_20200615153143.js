@@ -68,28 +68,52 @@ app.use(
 
 app.use(csrfProtection);
 app.use(flash());
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
+// app.use((req, res, next) => {
+//   User.findById('5bab316ce0a7c75f783cb8a8')
+//     .then(user => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.log(err));
+// });
+// app.use((req, res, next) => {
+//   res.locals.isAuthenticated = req.session.isLoggedIn;
+//   res.locals.csrfToken = req.csrfToken();
+//   next();
+// });
+
+// app.use((req, res, next) => {
+//   // throw new Error("Sync dimmy");
+//     if(!req.session.user){
+//       return next();
+//     }
+//   User.findById(req.session.user._id)
+//     .then((user) => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch((err) => {
+//      next(new Error(err));
+//     });
+// });
 
 app.use((req, res, next) => {
-  // throw new Error("Sync dimmy");
-    if(!req.session.user){
-      return next();
-    }
+  if (!req.session.user) {
+    return next();
+  }
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
       next();
     })
-    .catch((err) => {
-     next(new Error(err));
-    });
+    .catch((err) => console.log(err));
 });
 
-
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);

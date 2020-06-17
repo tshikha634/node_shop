@@ -13,6 +13,8 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 }));
 
 exports.getLogin = (req, res, next) => {
+  console.log(req.session.isLoggedIn, "getLogin");
+
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];

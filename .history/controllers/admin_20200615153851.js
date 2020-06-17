@@ -19,13 +19,12 @@ exports.postAddProduct = (req, res, next) => {
   const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
-  console.log(title,image,price,description)
   if (!image) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
       path: "/admin/add-product",
       editing: false,
-      hasError: true,
+      hasError: false,
       product: {
         title: title,
         price: price,
@@ -126,7 +125,7 @@ exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
-  const updatedImageUrl = req.file;
+  const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
 
   const errors = validationResult(req);
@@ -139,7 +138,7 @@ exports.postEditProduct = (req, res, next) => {
       hasError: true,
       product: {
         title: updatedTitle,
-        // imageUrl: updatedImageUrl,
+        imageUrl: updatedImageUrl,
         price: updatedPrice,
         description: updatedDesc,
         _id: prodId,
@@ -157,10 +156,7 @@ exports.postEditProduct = (req, res, next) => {
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDesc;
-      if(image){
-        product.imageUrl = image.path;
-      }
-      // product.imageUrl = updatedImageUrl;
+      product.imageUrl = updatedImageUrl;
       return product.save().then((result) => {
         console.log("UPDATED PRODUCT!");
         res.redirect("/admin/products");

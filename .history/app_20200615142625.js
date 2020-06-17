@@ -21,7 +21,7 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
-//diskstorage is storage engine which you can use with multer there you can pass a JS object to configure it, two keys destination and engine
+
 const fileStorage = multer.diskStorage({
   destination:(req,file,cb) => {
     cb(null, "images");
@@ -68,7 +68,16 @@ app.use(
 
 app.use(csrfProtection);
 app.use(flash());
+// app.use((req, res, next) => {
+//   User.findById('5bab316ce0a7c75f783cb8a8')
+//     .then(user => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.log(err));
+// });
 app.use((req, res, next) => {
+  console.log(res,req.session.isLoggedIn)
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   next();
@@ -82,6 +91,7 @@ app.use((req, res, next) => {
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
+      console.log(req.session.isLoggedIn)
       next();
     })
     .catch((err) => {
